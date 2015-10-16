@@ -5,11 +5,12 @@
  *      Author: trifon
  */
 
+#include <iomanip>
 
 #include <iostream>
 using namespace std;
 
-int main() {
+void recover() {
 	int a = 0;
 	cin >> a;
 	while (!cin) {
@@ -22,6 +23,16 @@ int main() {
 	}
 
 	cout << a << ' ' << cin.rdstate() << endl;
+}
+
+void manipulators() {
+	cout << hex << showbase << internal << setw(10) << setfill('.') << 123 << endl;
+	cout << scientific << 1.23;
+}
+
+int main() {
+	// recover();
+	manipulators();
 	return 0;
 }
 
