@@ -32,9 +32,33 @@ void test2() {
 		// cout << q.head() << ' ';
 	}
 }
+
+// O(log n)
+bool isHamming(int n) {
+	for(int d = 2; d <= 5; d++)
+		if (d != 4)
+			while (n % d == 0)
+				n /= d;
+	return n == 1;
+}
+
+// O(n(log n))
+void firstHamming(int n) {
+	int counter = 0;
+	int i = 1;
+	while (counter < n) {
+		if (isHamming(i)) {
+			cout << i << ' ';
+			counter++;
+		}
+		i++;
+	}
+}
+
 int main() {
-	test1();
-	test2();
+	// test1();
+	// test2();
+	firstHamming(10);
 	return 0;
 }
 
