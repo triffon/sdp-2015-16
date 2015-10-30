@@ -16,31 +16,39 @@ class StaticQueue {
 	int front, back;
 
 	bool full() const {
-		return back == MAX - 1;
+		return front == (back + 2) % MAX;
 	}
 
 public:
 	StaticQueue() : front(0), back(-1) {}
 
+	// O(1)
 	bool empty() const {
-		return front > back;
+		return front == (back + 1) % MAX;
 	}
 
+	// O(1)
 	void enqueue(T const& x) {
 		if (full())
 			cerr << "Опит за включване в пълна опашка!\n";
 		else
-			a[++back] = x;
+			a[++back %= MAX] = x;
 	}
 
+	// O(1)
 	T dequeue() {
 		if (empty()) {
 			cerr << "Опит за изключване от празна опашка!\n";
 			return T();
-		} else
-			return a[front++];
+		} else {
+			T x = head();
+			++front %= MAX;
+			return x;
+		}
+
 	}
 
+	// O(1)
 	T head() const {
 		if (empty()) {
 			cerr << "Опит за поглеждане в празна опашка!\n";
