@@ -97,7 +97,7 @@ void firstHammingQueue(int n) {
 }
 
 template <typename T>
-ostream& operator<<(ostream& os, LinkedQueue<T>& q) {
+ostream& operator<<(ostream& os, LinkedQueue<T> q) {
 	while (!q.empty())
 		os << q.dequeue() << ' ';
 	return os << endl;
@@ -121,14 +121,22 @@ T dequeueMin(LinkedQueue<T>& q) {
 	return min;
 }
 
+template <typename T>
+LinkedQueue<T> sortQueue(LinkedQueue<T>& q) {
+	LinkedQueue<T> result;
+	while (!q.empty())
+		result.enqueue(dequeueMin(q));
+	return result;
+}
+
 void testDequeueMin() {
 	LinkedQueue<int> q;
 	for (int i = 1; i < 20; i++)
 		q.enqueue(i * 101 % 37);
-	LinkedQueue<int> q2 = q;
-	cout << q2;
+	cout << q;
 	cout << "min: " << dequeueMin(q) << endl;
 	cout << q;
+	cout << sortQueue(q);
 }
 
 int main() {
