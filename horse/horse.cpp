@@ -13,6 +13,7 @@
 using namespace std;
 
 #include "lstack.cpp"
+#include "lqueue.cpp"
 
 vector<vector<bool> > board;
 
@@ -88,7 +89,7 @@ bool horse_rec(Point start, Point end,
 void horse_stack(Point start, Point end) {
 	LinkedStack<LinkedStack<Point> > history;
 	LinkedStack<Point> startStack;
-	// ofstream clog("log.txt");
+	ofstream clog("log.txt");
 	startStack.push(start);
 	history.push(startStack);
 	while (!history.empty() &&
@@ -130,11 +131,90 @@ void horse_stack(Point start, Point end) {
 	}
 }
 
+struct Position {
+	Point p;
+	int move;
+
+	Position(Point _p = Point(), int _move = 0) : p(_p), move(_move) {}
+};
+
+ostream& operator<<(ostream& os, Position const& position) {
+	return os << "[" << position.move << ':' << position.p << "]";
+}
+
+bool isValidMove(Point from, Point to) {
+	return to.first != from.first && to.second != from.second &&
+		abs(to.first - from.first) + abs(to.second - from.second) == 3;
+}
+
+void horse_queue(Point start, Point end) {
+	LinkedQueue<Position> q;
+	q.enqueue(start);
+	board[start.first][start.second] = true;
+	Position current;
+	LinkedStack<LinkedQueue<Position> > history;
+	LinkedQueue<Position> level;
+	int currentMove = 0;
+	history.push(level);
+	while (!q.empty() && (current = q.dequeue()).p != end) {
+		if (current.move == currentMove) {
+			history.peek().enqueue(current);
+		} else {
+			// current.move == currentMove + 1
+			currentMove = current.move;
+			LinkedQueue<Position> level;
+			level.enqueue(current);
+			history.push(level);
+		}
+		for(int dx = -2; dx <= 2; dx++)
+			if (dx != 0)
+				for(int sign = -1; sign <= 1; sign += 2) {
+					int dy = sign * (3 - abs(dx));
+					Point newstart(current.p.first + dx,
+								   current.p.second + dy);
+					Position newposition(newstart, current.move + 1);
+					if (inside_board(newstart)
+						&&
+						!board[newstart.first][newstart.second]) {
+						q.enqueue(newposition);
+						clog << newposition << endl;
+						board[newstart.first][newstart.second] = true;
+					}
+
+				}
+	}
+	// current == end -- успех
+	// q.empty() -- неуспех
+	clog << history;
+	history.pop();
+	if (current.p == end) {
+		cout << "Успех за " << current.move << " хода!" << endl;
+		LinkedStack<Point> path;
+		path.push(current.p);
+		while(!history.empty()) {
+			// в history.peek() търсим първата позиция position,
+			// за която isValidMove(current.p,position.p)
+			Position position;
+			while (!isValidMove(current.p,
+					           (position = history.peek().dequeue()).p));
+			// знаем, че isValidMove(current.p,position.p)
+			// добавим position в пътя
+			path.push(position.p);
+			history.pop();
+			current = position;
+		}
+		cout << path << endl;
+	}
+	else
+		cout << "Неуспех!" << endl;
+}
+
 int main() {
 	initBoard(4);
 	printBoard();
 	LinkedStack<Point> path;
 	// horse_rec(Point(0,0), Point(3,3), path);
-	horse_stack(Point(0,0), Point(1,1));
+	// horse_stack(Point(0,0), Point(1,1));
+	horse_queue(Point(0,0), Point(1,1));
 	return 0;
 }

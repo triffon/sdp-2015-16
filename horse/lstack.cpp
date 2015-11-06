@@ -162,4 +162,11 @@ LinkedStack<T>& LinkedStack<T>::operator=(LinkedStack<T> const& ls) {
 	return *this;
 }
 
+template <typename T>
+ostream& operator<<(ostream& os, LinkedStack<T> stack) {
+	while (!stack.empty())
+		os << stack.pop() << ' ';
+	return os << endl;
+}
+
 #endif
