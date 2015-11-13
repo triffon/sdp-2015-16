@@ -31,6 +31,10 @@ public:
 
 	typedef Iterator<T, LinkedListIterator<T> > I;
 
+	// оправя проблемите с използването на наследените префиксни оператори
+	using I::operator++;
+	using I::operator--;
+
 	// придвижва итератора напред и връща новата позиция
 	// O(1)
 	I& operator++() {
@@ -39,9 +43,6 @@ public:
 		return *this;
 	}
 
-	LinkedListIterator<T> operator++(int) {
-		return ((I&)(*this))++;
-	}
 
 	// придвижва итератора назад и връща новата позиция
 	I& operator--() {
