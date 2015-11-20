@@ -102,7 +102,7 @@ public:
 
 	// придвижва итератора назад и връща старата позиция
 	ConcreteIterator operator--(int) {
-		ConcreteIterator copy = *this;
+		ConcreteIterator copy = (ConcreteIterator&)*this;
 		operator--();
 		return copy;
 	}
@@ -119,6 +119,14 @@ public:
 	// проверка за невалидност
 	bool operator!() const {
 		return !operator bool();
+	}
+
+	// сравнение
+
+	virtual bool operator==(Iterator const&) const = 0;
+
+	bool operator!=(Iterator const& it) const {
+		return !(*this == it);
 	}
 
 	virtual ~Iterator() {}

@@ -6,8 +6,10 @@
  */
 
 #include "linked_list.cpp"
+#include "double_linked_list.cpp"
+#include <string>
 
-typedef LinkedList<int> TestList;
+typedef DoubleLinkedList<int> TestList;
 
 // O(n)
 template <typename T, typename I>
@@ -73,18 +75,97 @@ TestList sort(TestList const& l) {
 	return result;
 }
 
-template <typename T, typename I>
-T foldr(T (*op)(T, T), T nv, I it) {
+// !!! typedef T (*binop)(T, T);
+template <typename T>
+using binop = T (*)(T, T);
+
+template <typename T>
+using unop = T (*)(T);
+
+template <typename T>
+using pred = bool (*)(T);
+
+
+template <typename T, typename I, typename binop>
+T foldr(binop op, T nv, I it) {
 	if (!it)
 		return nv;
 	T x = *it++;
 	return op(x, foldr(op, nv, it));
 }
 
-int myplus(int x, int y) {
+template <typename T, typename I, typename binop>
+T foldl(binop op, T nv, I it) {
+	T result = nv;
+	while(it)
+		result = op(result,*it++);
+	return result;
+}
+
+template <typename T>
+T myplus(T x, T y) {
 	return x + y;
 }
 
+string concatSpace(string x, string y) {
+	return x + " " + y;
+}
+
+template <typename I, typename unop>
+void map(unop f, I it) {
+	for(;it;++it)
+		*it = f(*it);
+}
+
+int square(int x) {
+	return x * x;
+}
+
+template <typename T, typename I, typename pred>
+void filter(pred p, List<T, I>& l) {
+	I it = l.begin();
+	while (it) {
+		if (!p(*it)) {
+			T tmp;
+			I toDelete = it;
+			++it;
+			l.deleteAt(tmp, toDelete);
+		}
+		else
+			++it;
+	}
+}
+
+bool isEven(int x) {
+	return x % 2 == 0;
+}
+
+bool isOdd(int x) {
+	return x % 2 != 0;
+}
+
+int sumOddSquares(TestList l) {
+	/*
+	filter(isOdd, l);
+	map(square, l.begin());
+	return foldr(myplus<int>, 0, l.begin());
+	*/
+
+	filter([](int x) -> bool { return x % 2 != 0; }, l);
+	map([](int x) -> int { return x * x; }, l.begin());
+	return foldr([](int x, int y) -> int { return x + y; }, 0, l.begin());
+
+}
+
+template <typename T>
+bool isPalindrome(DoubleLinkedList<T> const& l) {
+	DoubleLinkedListIterator<T> pit = l.end(), nit = l.begin();
+	while (*nit == *pit && nit != pit && ++nit != pit--);
+	// *nit != *pit - лошо, не е палндром
+	// nit == pit - ОК, срещнаха се
+	// ++nit == pit - ОК, съседни са
+	return *nit == *pit;
+}
 
 void testList() {
 	TestList l;
@@ -122,7 +203,34 @@ void testList() {
 	//it++;
 	//cout << *it << ' ';
 	cout << sort(l) << endl;
-	cout << foldr(myplus, 0, l.begin()) << endl;
+
+	cout << sumOddSquares(l) << endl;
+
+	cout << foldr(myplus<int>, 0, l.begin()) << endl;
+	cout << foldl(myplus<int>, 0, l.begin()) << endl;
+	DoubleLinkedList<string> ls;
+	ls.insertEnd("hello");
+	ls.insertEnd("world");
+	ls.insertEnd("what");
+	ls.insertEnd("a");
+	ls.insertEnd("nice");
+	ls.insertEnd("day");
+	cout << foldr(myplus<string>, string(), ls.begin()) << endl;
+	cout << foldl(myplus<string>, string(), ls.begin()) << endl;
+	cout << foldr(concatSpace, string(), ls.begin()) << endl;
+	cout << foldl(concatSpace, string(), ls.begin()) << endl;
+	map(square, l.begin());
+	cout << l << endl;
+	filter(isEven, l);
+	cout << l << endl;
+
+	cout << ls << endl;
+	cout << isPalindrome(ls) << endl;
+	DoubleLinkedList<string> ls2 = ls;
+	reverse(ls2);
+	ls.append(ls2);
+	cout << ls << endl;
+	cout << isPalindrome(ls) << endl;
 }
 
 

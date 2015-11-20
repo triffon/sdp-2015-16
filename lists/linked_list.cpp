@@ -63,6 +63,10 @@ public:
 		return p != NULL;
 	}
 
+	bool operator==(I const& it) const {
+		return p == ((LinkedListIterator<T> const&)it).p;
+	}
+
 	friend class LinkedList<T>;
 
 };
