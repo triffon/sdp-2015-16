@@ -8,6 +8,9 @@
 #include <iostream>
 using namespace std;
 
+#ifndef _LINKED_LIST_CPP
+#define _LINKED_LIST_CPP
+
 #include "list.h"
 
 template <typename T>
@@ -216,3 +219,4 @@ public:
 
 };
 
+#endif
