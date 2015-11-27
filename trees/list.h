@@ -23,8 +23,10 @@ protected:
 
 	// O(n)
 	void clean() {
-		T tmp;
-		while (deleteEnd(tmp));
+		if (!empty()) {
+			T tmp;
+			while (deleteEnd(tmp));
+		}
 	}
 
 public:
