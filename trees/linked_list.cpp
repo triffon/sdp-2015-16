@@ -108,7 +108,7 @@ public:
 			this->clean();
 			this->copy(l);
 		}
-		return l;
+		return *this;
 	}
 
 	~LinkedList() {
