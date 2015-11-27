@@ -7,8 +7,10 @@
 
 
 #include "tree.cpp"
+#include "bintree.cpp"
 
 using TestTree = Tree<int>;
+using TestBinaryTree = BinaryTree<int>;
 
 template <typename I>
 int length(I it) {
@@ -44,8 +46,19 @@ void testTree() {
 	cout << breadth(t1) << endl;
 }
 
+void testBinaryTree() {
+	TestBinaryTree e;
+	TestBinaryTree t(1,
+                         TestBinaryTree(2, e, e),
+                         TestBinaryTree(3,
+                                        TestBinaryTree(4, e, e),
+                                        TestBinaryTree(5, e, e)));
+	cout << t;
+}
+
 int main() {
-	testTree();
+	// testTree();
+	testBinaryTree();
 	return 0;
 }
 
