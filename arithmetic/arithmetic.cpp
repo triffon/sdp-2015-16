@@ -9,6 +9,7 @@
 using namespace std;
 
 #include "lstack.cpp"
+#include "bintree.cpp"
 
 const int MAX = 100;
 
@@ -116,6 +117,59 @@ double calculate_expr(char const* expr) {
 	return results.pop();
 }
 
+using ExprTree = BinaryTree<char>;
+
+void applyTree(char op, LinkedStack<ExprTree>& stack) {
+	ExprTree rarg = stack.pop();
+	ExprTree larg = stack.pop();
+	stack.push(ExprTree(op, ExprTree(larg), ExprTree(rarg)));
+}
+
+ExprTree build_expr_tree(char const* expr) {
+	char const* p = expr;
+	LinkedStack<char> ops;
+	LinkedStack<ExprTree> results;
+
+	while (*p != '\0') {
+		if (*p == '(')
+			ops.push(*p);
+		else if (isop(*p)) {
+			while (!ops.empty() &&
+				   priority(ops.peek()) >= priority(*p))
+				applyTree(ops.pop(), results);
+			ops.push(*p);
+		}
+		else if (isdigit(*p))
+				results.push(ExprTree(*p));
+		else if (*p == ')') {
+				while(ops.peek() != '(')
+					applyTree(ops.pop(), results);
+				// махаме и (
+				ops.pop();
+		}
+		p++;
+	}
+	// изпразваме стека
+	while (!ops.empty())
+		applyTree(ops.pop(), results);
+	return results.pop();
+}
+
+double calc_expr_tree(BinaryTreePosition<char> pos) {
+	if (!pos)
+		return 0;
+	if (isdigit(*pos))
+		return valueof(*pos);
+	double l = calc_expr_tree(-pos);
+	double r = calc_expr_tree(+pos);
+	switch (*pos) {
+	case '+': return l + r;
+	case '-': return l - r;
+	case '*': return l * r;
+	case '/': return l / r;
+	}
+}
+
 int main() {
 	char expr[MAX] = "";
 	char rpn[MAX] = "";
@@ -124,4 +178,7 @@ int main() {
 	cout << rpn << endl;
 	cout << calculate_rpn(rpn) << endl;
 	cout << calculate_expr(expr) << endl;
+	ExprTree et = build_expr_tree(expr);
+	printDOT(ExprTree(et), "tree.dot");
+	cout << calc_expr_tree(et.root()) << endl;
 }

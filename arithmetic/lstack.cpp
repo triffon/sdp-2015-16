@@ -85,7 +85,7 @@ template <typename T>
 T LinkedStack<T>::pop() {
 	if (empty()) {
 		cout << "Грешка: опит за изключване от празен стек!\n";
-		return 0;
+		return T();
 	}
 	// top != NULL
 
