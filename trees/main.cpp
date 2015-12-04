@@ -5,9 +5,11 @@
  *      Author: trifon
  */
 
+#include <cmath>
 
 #include "tree.cpp"
 #include "bintree.cpp"
+#include "priority_queue.cpp"
 
 using TestTree = Tree<int>;
 using TestBinaryTree = BinaryTree<int>;
@@ -46,19 +48,55 @@ void testTree() {
 	cout << breadth(t1) << endl;
 }
 
+template <typename T>
+int depth(BinaryTreePosition<T> pos) {
+	if (!pos)
+		return 0;
+	return 1 + max(depth(-pos), depth(+pos));
+}
+
+template <typename T>
+bool operator==(BinaryTreePosition<T> p1, BinaryTreePosition<T> p2) {
+	return  (!p1 && !p2) ||
+			p1 && p2 && *p1 == *p2 && -p1 == -p2 && +p1 == +p2;
+}
+
 void testBinaryTree() {
 	TestBinaryTree e;
-	TestBinaryTree t(1,
-                         TestBinaryTree(2, e, e),
-                         TestBinaryTree(3,
-                                        TestBinaryTree(4, e, e),
-                                        TestBinaryTree(5, e, e)));
-	cout << t;
+	TestBinaryTree t(1, 2, TestBinaryTree(3, 4, 5));
+	//TestBinaryTree t2(0, t, t);
+	cout << "-----\n";
+	//cout << t2;
+	cout << t.root() << endl;
+	t.assignFrom(-+t.root(), TestBinaryTree(6,7,8));
+	printDOT(t, "tree.dot");
+	cout << "Дълбочина: " << depth(t.root()) << endl;
+	cout << t.root() << endl;
+	t.deleteAt(-+t.root());
+	cout << t.root() << endl;
+	cout << "Проверка за равенство: " <<
+			(TestBinaryTree(1, 2, TestBinaryTree(3, TestBinaryTree(), 6)).root()
+			 ==
+			t.root()) << endl;
+}
+
+void testPriorityQueue() {
+	PriorityQueue<int> pq;
+	pq.enqueue_prioritized(5);
+	pq.enqueue_prioritized(6);
+	pq.enqueue_prioritized(3);
+	pq.enqueue_prioritized(4);
+	pq.enqueue_prioritized(2);
+	pq.enqueue_prioritized(1);
+	cout << pq.dequeue_highest() << endl;
+	cout << pq.dequeue_highest() << endl;
+	pq.printDOT("heap.dot");
 }
 
 int main() {
 	// testTree();
-	testBinaryTree();
+	// testBinaryTree();
+	testPriorityQueue();
 	return 0;
 }
 
