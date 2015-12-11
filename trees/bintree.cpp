@@ -90,10 +90,17 @@ private:
 		from = NULL;
 	}
 
+
 public:
 
 	using P = BinaryTreePosition<T>;
 
+protected:
+	void assignFrom(P to, P from) {
+		assignFrom(*to.p, *from.p);
+	}
+
+public:
 	BinaryTree() : r(NULL) {}
 	BinaryTree(T const& x, BinaryTree<T>&& lt = BinaryTree<T>(),
 			               BinaryTree<T>&& rt = BinaryTree<T>()) {
@@ -118,7 +125,7 @@ public:
 	}
 
 	void assignFrom(P pos, BinaryTree<T>&& t) {
-		assignFrom(*pos.p, t.r);
+		assignFrom(pos, t.root());
 	}
 
 	void deleteAt(P pos) {
