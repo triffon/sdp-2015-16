@@ -59,7 +59,7 @@ public:
 	T head() { return *BinaryTree<T>::root(); }
 
 	void enqueue_prioritized(T const& x) {
-		insertAndSift(BinaryTree<T>::root(), x);
+		insertAndSiftUp(BinaryTree<T>::root(), x);
 	}
 
 	T dequeue_highest() {

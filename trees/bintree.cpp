@@ -188,7 +188,7 @@ void printDOT(ofstream& dot, BinaryTreePosition<T> pos) {
 }
 
 template <typename T>
-void printDOT(BinaryTree<T>&& t, char const* filename) {
+void printDOT(BinaryTree<T>& t, char const* filename) {
 	ofstream dot(filename);
 	dot << "digraph tree { ";
 	printDOT(dot, t.root());
