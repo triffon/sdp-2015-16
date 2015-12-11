@@ -10,9 +10,11 @@
 #include "tree.cpp"
 #include "bintree.cpp"
 #include "priority_queue.cpp"
+#include "binsearchtree.cpp"
 
 using TestTree = Tree<int>;
 using TestBinaryTree = BinaryTree<int>;
+using TestBST = BinarySearchTree<int>;
 
 template <typename I>
 int length(I it) {
@@ -163,11 +165,25 @@ void testHeapSort() {
 	heapSort(a, N);
 }
 
+void testBST() {
+	TestBST t;
+	t.insert(10);
+	t.insert(20);
+	t.insert(5);
+	t.insert(35);
+	t.insert(15);
+	t.insert(15);
+	cout << (bool)t.search(20) << endl;
+	cout << (bool)t.search(2) << endl;
+	t.printDOT("bst.dot");
+}
+
 int main() {
 	// testTree();
 	// testBinaryTree();
 	// testPriorityQueue();
-	testHeapSort();
+	// testHeapSort();
+	testBST();
 	return 0;
 }
 
