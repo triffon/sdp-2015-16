@@ -5,6 +5,9 @@
  *      Author: trifon
  */
 
+#ifndef _BINTREE_CPP
+#define _BINTREE_CPP
+
 #include <iostream>
 #include <fstream>
 using namespace std;
@@ -194,3 +197,5 @@ void printDOT(BinaryTree<T>& t, char const* filename) {
 	printDOT(dot, t.root());
 	dot << "}";
 }
+
+#endif
