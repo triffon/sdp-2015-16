@@ -29,32 +29,32 @@ class BinaryTree;
 template <typename T>
 class BinaryTreePosition {
 private:
-	TreeNode<T>*& p;
+	TreeNode<T>** p;
 public:
-	BinaryTreePosition(TreeNode<T>*& _p) : p(_p) {}
+	BinaryTreePosition(TreeNode<T>*& rp) : p(&rp) {}
 
 	operator bool() const {
-		return p != NULL;
+		return *p != NULL;
 	}
 
 	bool operator!() const {
-		return p == NULL;
+		return *p == NULL;
 	}
 
 	T& operator*() const {
-		return p->data;
+		return (*p)->data;
 	}
 
 	BinaryTreePosition operator+() const {
-		if (p == NULL)
+		if (*p == NULL)
 			return *this;
-		return BinaryTreePosition(p->right);
+		return BinaryTreePosition((*p)->right);
 	}
 
 	BinaryTreePosition operator-() const {
-		if (p == NULL)
+		if (*p == NULL)
 			return *this;
-		return BinaryTreePosition(p->left);
+		return BinaryTreePosition((*p)->left);
 	}
 
 	friend class BinaryTree<T>;
@@ -118,12 +118,12 @@ public:
 	}
 
 	void assignFrom(P pos, BinaryTree<T>&& t) {
-		assignFrom(pos.p, t.r);
+		assignFrom(*pos.p, t.r);
 	}
 
 	void deleteAt(P pos) {
 		TreeNode<T>* tmp = NULL;
-		assignFrom(pos.p, tmp);
+		assignFrom(*pos.p, tmp);
 	}
 
 	/*

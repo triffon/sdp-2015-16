@@ -78,6 +78,9 @@ void testBinaryTree() {
 			(TestBinaryTree(1, 2, TestBinaryTree(3, TestBinaryTree(), 6)).root()
 			 ==
 			t.root()) << endl;
+	BinaryTreePosition<int> pos = t.root();
+	pos = +pos;
+	BinaryTreePosition<int> newpos = +pos;
 }
 
 void testPriorityQueue() {
