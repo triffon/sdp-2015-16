@@ -96,10 +96,78 @@ void testPriorityQueue() {
 	pq.printDOT("heap.dot");
 }
 
+template <typename T>
+void printArray(T a[], int n) {
+	for(int i = 0; i < n; i++)
+		cout << a[i] << ' ';
+	cout << endl;
+}
+
+inline int left(int i) {
+	return 2 * i + 1;
+}
+
+inline int right(int i) {
+	return 2 * i + 2;
+}
+
+
+// пресяваме възела с индекс i надолу
+template <typename T>
+void siftDown(T a[], int i, int n) {
+	// докато има дете, от което a[i] е по-малко
+	while (left(i)  < n && a[i] < a[left(i)] ||
+		   right(i) < n && a[i] < a[right(i)]) {
+		// кое е по-голямото дете
+		// Може би е лявото
+		int newi = left(i);
+		// А дали не е дясното?
+		if (right(i) < n && a[right(i)] > a[left(i)])
+			newi = right(i);
+		swap(a[i], a[newi]);
+		i = newi;
+	}
+	// (left(i) >= n || a[i] >= a[left(i)]) &&
+    // (right(i) >= n || a[i] >= a[right(i)])
+}
+
+template <typename T>
+void buildHeap(T a[], int n) {
+	for(int i = n / 2 - 1; i >= 0; i--)
+		siftDown(a, i, n);
+}
+
+template <typename T>
+void disassembleHeap(T a[], int n) {
+	for(int i = n - 1; i >= 1; i--) {
+		swap(a[0], a[i]);
+		siftDown(a, 0, i);
+	}
+}
+
+template <typename T>
+void heapSort(T a[], int n) {
+	printArray(a, n);
+	// 1. построяваме пирамида
+	buildHeap(a, n);
+	printArray(a, n);
+
+	// 2. разглобяваме пирамидата
+	disassembleHeap(a, n);
+	printArray(a, n);
+}
+
+void testHeapSort() {
+	int a[] = { 5, 1, 7, 2, 8, 4, 6, 10, 3, 8, 7 };
+	const int N = sizeof(a) / sizeof(a[0]);
+	heapSort(a, N);
+}
+
 int main() {
 	// testTree();
 	// testBinaryTree();
-	testPriorityQueue();
+	// testPriorityQueue();
+	testHeapSort();
 	return 0;
 }
 
