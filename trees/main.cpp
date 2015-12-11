@@ -173,9 +173,18 @@ void testBST() {
 	t.insert(35);
 	t.insert(15);
 	t.insert(15);
+	t.insert(18);
+	t.insert(19);
 	cout << (bool)t.search(20) << endl;
 	cout << (bool)t.search(2) << endl;
 	t.printDOT("bst.dot");
+	t.remove(10);
+	t.printDOT("bst2.dot");
+	t.remove(15);
+	t.printDOT("bst3.dot");
+	t.remove(20);
+	t.remove(20);
+	t.printDOT("bst4.dot");
 }
 
 int main() {
