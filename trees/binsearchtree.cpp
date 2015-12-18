@@ -11,7 +11,7 @@
 #include "bintree.cpp"
 
 template <typename T>
-class BinarySearchTree : BinaryTree<T> {
+class BinarySearchTree : protected BinaryTree<T> {
 public:
 	using typename BinaryTree<T>::P;
 
