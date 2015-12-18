@@ -187,12 +187,33 @@ void testBST() {
 	t.printDOT("bst4.dot");
 }
 
+template <typename T>
+BinaryTree<T> buildPBT(T a[], int n) {
+	if (n == 0)
+		return BinaryTree<T>();
+	int mid = n / 2;
+	return BinaryTree<T>(a[mid], buildPBT(a, mid),
+								 buildPBT(a + mid + 1, n - mid - 1));
+}
+
+void testBuildPBT() {
+	const int N = 20;
+	int a[N];
+	for(int i = 0; i < N; i++)
+		a[i] = i + 1;
+	TestBinaryTree&& bt = buildPBT(a, N);
+	cout << depth(bt.root()) << endl;
+	printDOT(bt,"pbt.dot");
+}
+
+
 int main() {
 	// testTree();
 	// testBinaryTree();
 	// testPriorityQueue();
 	// testHeapSort();
 	testBST();
+	// testBuildPBT();
 	return 0;
 }
 
