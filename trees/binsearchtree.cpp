@@ -51,19 +51,7 @@ public:
 		P pos = findPosition(x);
 		if (!pos)
 			return false;
-		BinarySearchTree<T> dyingThief;
-		if (!-pos) {
-			// крадецът краде x и детето му
-			dyingThief.assignFrom(dyingThief.root(), pos);
-			// родителят на x си връща дясното дете на x
-			BinaryTree<T>::assignFrom(pos, +dyingThief.root());
-		} else
-		if (!+pos) {
-			// крадецът краде x и детето му
-			dyingThief.assignFrom(dyingThief.root(), pos);
-			// родителят на x си връща лявото дете на x
-			BinaryTree<T>::assignFrom(pos, -dyingThief.root());
-		} else {
+		if (+pos && -pos) {
 			// има и двете поддървета
 			// трябва да заменим корена с M
 			// където M е най-малкият (най-левият) елемент
@@ -73,16 +61,20 @@ public:
 			while (-m) m = -m;
 			// Като не можем повече (!-m), тогава сме на най-малкия елемент
 
-			// 1. числото в m отива на мястото на корена
+			// числото в m отива на мястото на корена
 			*pos = *m;
-			// 2. крадецът открадва m и детето му
-			dyingThief.assignFrom(dyingThief.root(), m);
-			// 3. родителят на m си връща дясното дете на m
-			BinaryTree<T>::assignFrom(m, +dyingThief.root());
+			// сведохме задачата до случая, когато нямаме ляво поддърво
+			pos = m;
 		}
+		// тук сме сигурни, че !-pos || !+pos
+		if (!-pos)
+			// закачаме дясното дете на мястото на родителя
+			BinaryTree<T>::assignFrom(pos, +pos);
+		else
+			// !+pos
+			// закачаме лявото дете на мястото на родителя
+			BinaryTree<T>::assignFrom(pos, -pos);
 
-		// dyingThief умира и завлича със себе си откраднатия възел
-		// но само него, без децата му
 		return true;
 	}
 

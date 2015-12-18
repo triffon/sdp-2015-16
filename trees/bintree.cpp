@@ -85,9 +85,16 @@ private:
 	BinaryTree(TreeNode<T>* p) : r(copyNode(p)) {}
 
 	void assignFrom(TreeNode<T>*& to, TreeNode<T>*& from) {
-		eraseNode(to);
+		// Запомняме си старата стойност, за да я изтрием
+		TreeNode<T>* toDelete = to;
+		// прехвърляме новата стойност
 		to = from;
+		// като я "открадваме", т.е. в дървото, от което вземаме
+		// нулираме указателя
 		from = NULL;
+		// изтриваме старата стойност, за да предотвратим изтичане
+		// на памет
+		eraseNode(toDelete);
 	}
 
 
