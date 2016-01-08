@@ -7,10 +7,12 @@
 
 #include <iostream>
 #include "avl_dictionary.cpp"
+#include "hashtable.hpp"
 
 using namespace std;
 
- using TestDictionary = AVLDictionary<string, string>;
+// using TestDictionary = AVLDictionary<string, string>;
+using TestDictionary = LinkedHashTable<string, string>;
 
 void testDictionary() {
 	TestDictionary dict(myhash);
@@ -35,7 +37,19 @@ void testDictionary() {
 	cout << dict.values();
 }
 
+void testHashFunction() {
+	string keys[] = { "Todor", "Ivan", "Maria",
+				"Vasil", "Ani", "Robert", "Bozhidar", "Yordan", "Plamena"
+	};
+	const int N = sizeof(keys) / sizeof(keys[0]);
+	int MAX = 41;
+	for(int i = 0; i < N; i++)
+		cout << keys[i] << " -> " << myhash(keys[i], MAX) << endl;
+}
+
 int main() {
 	testDictionary();
+	// testHashFunction();
 	return 0;
 }
+
