@@ -15,6 +15,19 @@ using namespace std;
 template <typename K, typename V>
 class Dictionary {
 public:
+	// адресиране по ключ
+	// ht["Ivan"] = "Prodanov";
+	// ако "Ivan" го няма в таблицата, ще го създаде
+	V& operator[](K const& key) {
+		V* value = lookup(key);
+		if (value != NULL)
+			return *value;
+		else {
+			add(key, V());
+			return *lookup(key);
+		}
+	}
+
 	// търсене
 	virtual V* lookup(K const&) = 0;
 
