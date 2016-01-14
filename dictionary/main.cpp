@@ -8,6 +8,10 @@
 #include <iostream>
 #include "avl_dictionary.cpp"
 #include "hashtable.hpp"
+#include "set.cpp"
+
+template <typename T> using HashSet = Set<T, LinkedHashTable>;
+template <typename T> using AVLSet = Set<T, AVLDictionary>;
 
 using namespace std;
 
@@ -48,9 +52,27 @@ void testHashFunction() {
 		cout << keys[i] << " -> " << myhash(keys[i], MAX) << endl;
 }
 
+int myhash(unsigned const& x, int MAX) {
+	return x % MAX;
+}
+
+void testSet() {
+	HashSet<unsigned> set;
+	set.setHashFunction(myhash);
+	const int N = 10;
+	for(int i = 0; i < N; i++)
+		set.insert(i);
+	cout << set.contains(5) << endl;
+	set.remove(5);
+	cout << set.contains(5) << endl;
+	cout << set.contains(15) << endl;
+	cout << set.elements();
+}
+
 int main() {
-	testDictionary();
+	// testDictionary();
 	// testHashFunction();
+	testSet();
 	return 0;
 }
 
