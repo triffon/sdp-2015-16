@@ -49,7 +49,11 @@ private:
 	}
 
 public:
-	LinkedHashTable(HashFunction<K> hf) : hashFunction(hf) {}
+	LinkedHashTable(HashFunction<K> hf = NULL) : hashFunction(hf) {}
+
+	void setHashFunction(HashFunction<K> hf) {
+		hashFunction = hf;
+	}
 
 	// търсене
 	V* lookup(K const& key) {

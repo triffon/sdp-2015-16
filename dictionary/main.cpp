@@ -33,6 +33,7 @@ void testDictionary() {
 		cout << *name << endl;
 	else
 		cout << "Няма фамилия!\n";
+	cout << dict["Plamena"] << endl;
 	cout << dict.keys();
 	cout << dict.values();
 }
