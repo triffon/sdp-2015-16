@@ -13,6 +13,7 @@ using namespace std;
 
 #include "hashtable.hpp"
 #include "linked_list.cpp"
+#include "set.cpp"
 
 template <typename T>
 class Graph {
@@ -91,5 +92,40 @@ public:
 	using Graph<unsigned>::successors;
 	using Graph<unsigned>::printDOT;
 };
+
+class IntSet : public Set<unsigned, LinkedHashTable> {
+public:
+	using S = Set<unsigned, LinkedHashTable>;
+
+	IntSet() {
+		S::setHashFunction(inthash);
+	}
+
+	using S::empty;
+	using S::insert;
+	using S::remove;
+	using S::contains;
+	using S::elements;
+};
+
+int intinthash(pair<unsigned, unsigned>const& p, int MAX) {
+	return (inthash(p.first, MAX) ^ inthash(p.second, MAX)) % MAX;
+}
+
+class IntIntSet : public Set<pair<unsigned, unsigned>, LinkedHashTable> {
+public:
+	using S = Set<pair<unsigned, unsigned>, LinkedHashTable>;
+
+	IntIntSet() {
+		S::setHashFunction(intinthash);
+	}
+
+	using S::empty;
+	using S::insert;
+	using S::remove;
+	using S::contains;
+	using S::elements;
+};
+
 
 #endif
